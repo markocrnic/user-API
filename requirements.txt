@@ -1,0 +1,3 @@
+flask
+schema
+psycopg2==2.7.6
