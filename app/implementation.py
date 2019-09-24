@@ -1,4 +1,4 @@
-from app.dbconnect import connection
+from dbconnect import connection
 
 import json
 
