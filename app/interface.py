@@ -1,9 +1,11 @@
 from flask import Flask, request, jsonify
 from schema import Schema, And, Use
+from flask_cors import CORS
 
 import implementation as implementation
 
 app = Flask(__name__)
+CORS(app)
 
 schema = Schema({'first_name': And(str, len),
                  'last_name': And(str, len),
