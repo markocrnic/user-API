@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from schema import Schema, And, Use
 
-import app.implementation as implementation
+import implementation as implementation
 
 app = Flask(__name__)
 
