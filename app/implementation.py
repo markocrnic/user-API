@@ -19,7 +19,7 @@ def getAllUsers():
                 payload.append(content)
             c.close()
             conn.close()
-            return payload, 200
+            return payload
         else:
             return 'No data to return.', 204
     except Exception as e:
