@@ -61,7 +61,7 @@ def getUserByID(user_id):
                            "email": data[4], "admin": str(data[5])}
             c.close()
             conn.close()
-            return content, 200
+            return content
         else:
             c.close()
             conn.close()
@@ -133,7 +133,9 @@ def putDataCheck(request, data):
         username = listData[3]
         email = listData[4]
         admin = listData[5]
-        password = listData[6]
+        password = ''
+        if len(listData) == 7:
+            password = listData[6]
         if 'first_name' in request.json:
             first_name = request.json['first_name']
         if 'last_name' in request.json:
@@ -149,6 +151,7 @@ def putDataCheck(request, data):
         updateData = [first_name, last_name, username, email, admin, password]
 
         return updateData
-    except:
+    except Exception as e:
+        print(e)
         return "Something went wrong in mapping data."
 
