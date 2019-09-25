@@ -11,7 +11,8 @@ schema = Schema({'first_name': And(str, len),
                  'last_name': And(str, len),
                  'username': And(str, len),
                  'email': And(str, len),
-                 'admin': And(Use(bool))})
+                 'admin': And(Use(bool)),
+                 'password': And(str, len)})
 
 
 @app.route('/users/', methods=['GET', 'POST'])

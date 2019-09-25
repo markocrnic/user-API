@@ -1,4 +1,5 @@
 from dbconnect import connection
+from passlib.hash import sha256_crypt
 
 import json
 
@@ -32,7 +33,11 @@ def postUser(request):
     try:
         c, conn = connection()
 
-        c.execute('INSERT INTO "user" (first_name, last_name, username, email, admin) values (%s, %s, %s, %s, %s)', (str(request.json['first_name']), str(request.json['last_name']), str(request.json['username']), str(request.json['email']), str(request.json['admin'])))
+        passwd = sha256_crypt.encrypt(str(request.json['password']))
+        print(passwd)
+
+
+        c.execute('INSERT INTO "user" (first_name, last_name, username, email, admin, password) values (%s, %s, %s, %s, %s, %s)', (str(request.json['first_name']), str(request.json['last_name']), str(request.json['username']), str(request.json['email']), str(request.json['admin']), passwd))
         conn.commit()
 
         c.close()
@@ -80,7 +85,7 @@ def putUserByID(request, user_id):
             putData = putDataCheck(request, data)
             if putData == "Something went wrong in mapping data.":
                 return "Something went wrong in mapping data.", 500
-            c.execute('UPDATE "user" SET user_id = %s, first_name = %s, last_name = %s, username = %s, email = %s, admin = %s WHERE user_id = %s',(str(user_id), putData[0], putData[1], putData[2], putData[3], putData[4], str(user_id)))
+            c.execute('UPDATE "user" SET user_id = %s, first_name = %s, last_name = %s, username = %s, email = %s, admin = %s, password = %s WHERE user_id = %s',(str(user_id), putData[0], putData[1], putData[2], putData[3], putData[4], putData[5], str(user_id)))
             conn.commit()
             print("User with user_id " + str(user_id) + " is updated.")
 
@@ -128,6 +133,7 @@ def putDataCheck(request, data):
         username = listData[3]
         email = listData[4]
         admin = listData[5]
+        password = listData[6]
         if 'first_name' in request.json:
             first_name = request.json['first_name']
         if 'last_name' in request.json:
@@ -138,7 +144,9 @@ def putDataCheck(request, data):
             email = request.json['email']
         if 'admin' in request.json:
             admin = request.json['admin']
-        updateData = [first_name, last_name, username, email, admin]
+        if 'password' in request.json:
+            password = sha256_crypt.encrypt(str(request.json['password']))
+        updateData = [first_name, last_name, username, email, admin, password]
 
         return updateData
     except:
