@@ -24,10 +24,10 @@ def usersGlobal():
             try:
                 validated = schema.validate(request.json)
             except:
-                return 'Data is not valid.'
+                return 'Data is not valid.', 403
             return implementation.postUser(request)
     except:
-        return 'Something went wrong at /users/'
+        return 'Something went wrong at /users/', 500
 
 
 @app.route('/users/<int:user_id>/', methods=['GET', 'PUT', 'DELETE'])
@@ -40,10 +40,10 @@ def usersWithID(user_id):
         elif request.method == 'DELETE':
             return implementation.deleteUserByID(user_id)
         else:
-            return "Check request again."
+            return "Check request again.", 400
     except Exception as e:
         print(e)
-        return "Something went wrong at /users/<int:user_id>"
+        return "Something went wrong at /users/<int:user_id>", 500
 
 
 if __name__ == '__main__':
