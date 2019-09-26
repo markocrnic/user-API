@@ -21,12 +21,12 @@ def getAllUsers():
             conn.close()
             return payload
         else:
-            return 'No data to return.', 204
+            return {'msg': 'No data to return.'}, 204
     except Exception as e:
         c.close()
         conn.close()
         print(e)
-        return 'Something went wrong while fetching users.', 500
+        return {'msg': 'Something went wrong while fetching users.'}, 500
 
 
 def postUser(request):
@@ -42,13 +42,13 @@ def postUser(request):
 
         c.close()
         conn.close()
-        return "New user added to DB.", 201
+        return {"msg": "New user added to DB."}, 201
 
     except Exception as e:
         c.close()
         conn.close()
         print(e)
-        return "Something went wrong while inserting user to DB.", 500
+        return {"msg": "Something went wrong while inserting user to DB."}, 500
 
 
 def getUserByID(user_id):
@@ -71,7 +71,7 @@ def getUserByID(user_id):
         c.close()
         conn.close()
         print(e)
-        return "Something went while fetching user by id.", 500
+        return {"msg": "Something went wrong while fetching user by id."}, 500
 
 
 def putUserByID(request, user_id):
@@ -84,20 +84,20 @@ def putUserByID(request, user_id):
         else:
             putData = putDataCheck(request, data)
             if putData == "Something went wrong in mapping data.":
-                return "Something went wrong in mapping data.", 500
+                return {"msg": "Something went wrong in mapping data."}, 500
             c.execute('UPDATE "user" SET user_id = %s, first_name = %s, last_name = %s, username = %s, email = %s, admin = %s, password = %s WHERE user_id = %s',(str(user_id), putData[0], putData[1], putData[2], putData[3], putData[4], putData[5], str(user_id)))
             conn.commit()
             print("User with user_id " + str(user_id) + " is updated.")
 
             c.close()
             conn.close()
-            return "User with user_id " + str(user_id) + " is updated.", 200
+            return {"msg": "User with user_id " + str(user_id) + " is updated."}, 200
 
     except Exception as e:
         c.close()
         conn.close()
         print(e)
-        return "Something went wrong while updating user.", 500
+        return {"msg": "Something went wrong while updating user."}, 500
 
 
 def deleteUserByID(user_id):
@@ -106,7 +106,7 @@ def deleteUserByID(user_id):
 
         data = getUserByID(user_id)
         if data == "No data to return.":
-            return "User with user_id " + str(user_id) + " does not exist in DB."
+            return {"msg": "User with user_id " + str(user_id) + " does not exist in DB."}
         else:
             c.execute('DELETE FROM "user" WHERE user_id = ' + (str(user_id)))
             conn.commit()
@@ -114,13 +114,13 @@ def deleteUserByID(user_id):
 
             c.close()
             conn.close()
-            return "User with user_id " + str(user_id) + " is deleted from DB."
+            return {"msg": "User with user_id " + str(user_id) + " is deleted from DB."}
 
     except Exception as e:
         c.close()
         conn.close()
         print(e)
-        return "Something went wrong while deleting user", 500
+        return {'msg': 'Something went wrong while deleting user'}, 500
 
 
 def putDataCheck(request, data):
