@@ -1,4 +1,5 @@
 from dbconnect import connection
+from flask import jsonify
 from passlib.hash import sha256_crypt
 
 import json
@@ -6,7 +7,11 @@ import json
 
 def getAllUsers():
     try:
+        # Check if circuit is open
+
         c, conn = connection()
+        if c == {'msg': 'Circuit breaker is open, reconnection in porgress'}:
+            return c, 500
 
         data = c.execute('SELECT * FROM "user"')
         data = c.fetchall()
@@ -19,7 +24,7 @@ def getAllUsers():
                 payload.append(content)
             c.close()
             conn.close()
-            return payload
+            return jsonify(payload)
         else:
             return {'msg': 'No data to return.'}, 204
     except Exception as e:
@@ -31,7 +36,10 @@ def getAllUsers():
 
 def postUser(request):
     try:
+        # Check if circuit is open
         c, conn = connection()
+        if c == {'msg': 'Circuit breaker is open, reconnection in porgress'}:
+            return c, 500
 
         passwd = sha256_crypt.encrypt(str(request.json['password']))
         print(passwd)
@@ -53,7 +61,11 @@ def postUser(request):
 
 def getUserByID(user_id):
     try:
+        # Check if circuit is open
         c, conn = connection()
+        if c == {'msg': 'Circuit breaker is open, reconnection in porgress'}:
+            return c, 500
+
         data = c.execute('SELECT * FROM "user" where user_id = ' + str(user_id))
         data = c.fetchone()
         if data is not None and c.rowcount != 0:
@@ -76,7 +88,10 @@ def getUserByID(user_id):
 
 def putUserByID(request, user_id):
     try:
+        # Check if circuit is open
         c, conn = connection()
+        if c == {'msg': 'Circuit breaker is open, reconnection in porgress'}:
+            return c, 500
 
         data = getUserByID(user_id)
         if data == "No data to return.":
@@ -102,7 +117,10 @@ def putUserByID(request, user_id):
 
 def deleteUserByID(user_id):
     try:
+        #Check if circuit is open
         c, conn = connection()
+        if c == {'msg': 'Circuit breaker is open, reconnection in porgress'}:
+            return c, 500
 
         data = getUserByID(user_id)
         if data == "No data to return.":
