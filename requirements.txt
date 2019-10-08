@@ -3,3 +3,4 @@ schema
 psycopg2==2.7.6
 flask_cors
 passlib
+#psycopg2-binary==2.7.6
