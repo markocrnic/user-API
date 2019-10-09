@@ -79,7 +79,7 @@ def getUserByUsername(username):
         else:
             c.close()
             conn.close()
-            return "No data to return."
+            return "No data to return.", 204
 
     except Exception as e:
         c.close()
