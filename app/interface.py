@@ -47,5 +47,10 @@ def usersWithID(user_id):
         return {'msg': 'Something went wrong at /users/<int:user_id>'}, 500
 
 
+@app.route('/users/<username>', methods=['GET'])
+def usersWithUsername(username):
+    return implementation.getUserByUsername(username)
+
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

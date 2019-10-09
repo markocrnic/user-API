@@ -59,6 +59,35 @@ def postUser(request):
         return {"msg": "Something went wrong while inserting user to DB."}, 500
 
 
+def getUserByUsername(username):
+    try:
+        # Check if circuit is open
+        c, conn = connection()
+        if c == {'msg': 'Circuit breaker is open, reconnection in porgress'}:
+            return c, 500
+
+        data = c.execute('SELECT * FROM "user" where username = %s', (str(username),))
+        data = c.fetchone()
+
+        if data is not None and c.rowcount != 0:
+            content = {"user_id": str(data[0]), "first_name": data[1], "last_name": data[2], "username": data[3],
+                       "email": data[4], "admin": str(data[5]), "password": str(data[6])}
+            c.close()
+            conn.close()
+            return content
+
+        else:
+            c.close()
+            conn.close()
+            return "No data to return."
+
+    except Exception as e:
+        c.close()
+        conn.close()
+        print(e)
+        return {"msg": "Something went wrong while fetching user by username."}, 500
+
+
 def getUserByID(user_id):
     try:
         # Check if circuit is open
