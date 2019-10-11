@@ -99,7 +99,7 @@ def getUserByID(user_id):
         data = c.fetchone()
         if data is not None and c.rowcount != 0:
             content = {"user_id": str(data[0]), "first_name": data[1], "last_name": data[2], "username": data[3],
-                           "email": data[4], "admin": str(data[5])}
+                           "email": data[4], "admin": str(data[5]), "password": str(data[6])}
             c.close()
             conn.close()
             return content
