@@ -86,8 +86,6 @@ class CircuitBreaker:
         self.error_occurrence = 0
 
 
-# CHECK FOR CREATED CIRCUIT BREAKERS - PASTE INTO CONNECTION FUNCTION
-'''
 def check_breaker():
     global cb
     print('starting cb check: \n')
@@ -98,18 +96,10 @@ def check_breaker():
         cb = None
     if cb is None:
         print('cb is None\n')
-        cb = cbreaker.CircuitBreaker(2, 0, 10, 5, ['OperationalError'])
+        cb = CircuitBreaker(2, 0, 10, 5, ['OperationalError'])
         print('Created new circuit breaker\n')
     else:
         print('cb is not none. Displaying values on entry to connect method')
         cb.display()
-    
-    # calling thread should be outside of check_breaker method
-    frm = inspect.stack()[1]
-    mod = inspect.getmodule(frm[0])
-    if mod.__name__ != 'app.circuit_breaker' and cb.getFlagReconnection():
-        return '500'
 
-    print('Module name is: ' + mod.__name__)
     return cb
-'''
