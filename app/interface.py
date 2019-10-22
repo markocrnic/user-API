@@ -1,18 +1,9 @@
 from flask import Flask, request
-from schema import Schema, And, Use
 from flask_cors import CORS
-
 import implementation as implementation
 
 app = Flask(__name__)
 CORS(app)
-
-schema = Schema({'first_name': And(str, len),
-                 'last_name': And(str, len),
-                 'username': And(str, len),
-                 'email': And(str, len),
-                 'admin': And(Use(bool)),
-                 'password': And(str, len)})
 
 
 @app.route('/users/', methods=['GET', 'POST'])
@@ -23,7 +14,8 @@ def usersGlobal():
             return data
         elif request.method == 'POST':
             try:
-                validated = schema.validate(request.json)
+                schema = implementation.getSchema()
+                schema.validate(request.json)
             except:
                 return {'msg': 'Data is not valid.'}, 403
             return implementation.postUser(request)
