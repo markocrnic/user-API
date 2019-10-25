@@ -1,6 +1,5 @@
-from dbconnect import connection
+from db.dbconnect import connection
 from flask import jsonify
-import implementation as operations
 
 
 def querydb(data, operation, check=None, user_id=None):

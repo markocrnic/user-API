@@ -4,7 +4,7 @@ import sys
 sys.path.insert(1, os.path.join(sys.path[0], '../app'))
 
 from interface import app
-from dbconnect import connection
+from db.dbconnect import connection
 from flask import json
 
 

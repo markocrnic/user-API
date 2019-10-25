@@ -20,6 +20,7 @@ def usersGlobal():
                 return {'msg': 'Data is not valid.'}, 403
             return implementation.postUser(request)
     except:
+        print('I am in except', flush=True)
         return {'msg': 'Something went wrong at /users/'}, 500
 
 

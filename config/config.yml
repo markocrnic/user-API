@@ -1,0 +1,6 @@
+postgres:
+  user: postgres
+  password: postgres
+  host: 10.0.200.68
+  port: 5432
+  database: planthealthcare
