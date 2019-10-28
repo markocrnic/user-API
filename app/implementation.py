@@ -3,19 +3,26 @@ from db.dbquery import querydb
 from schema import Schema, And, Use
 
 
-def getAllUsers():
-    data = 'SELECT * FROM "user"'
+def getAllUsers(data=None):
+    if data is None:
+        data = 'SELECT * FROM "user"'
     return querydb(data, operation='GET', check='list')
 
 
 def postUser(request):
-    passwd = sha256_crypt.encrypt(str(request.json['password']))
-    data = "INSERT INTO \"user\" (first_name, last_name, username, email, admin, password) values ('" + str(
-        request.json['first_name']) + "', '" + str(request.json['last_name']) + "', '" + str(
-        request.json['username']) + "', '" + str(request.json['email']) + "', '" + str(
-        request.json['admin']) + "', '" + str(passwd) + "')"
+    # Add OR username = str(request.json['username'])
+    checkUserEmail = 'SELECT * FROM "user" WHERE email=' + "'" + str(request.json['email']) + "' OR username=" + "'" + str(request.json['username']) + "'"
+    checkResponse = getAllUsers(checkUserEmail)
+    if checkResponse == ({'msg': 'No data to return.'}, 204):
+        passwd = sha256_crypt.encrypt(str(request.json['password']))
+        data = "INSERT INTO \"user\" (first_name, last_name, username, email, admin, password) values ('" + str(
+            request.json['first_name']) + "', '" + str(request.json['last_name']) + "', '" + str(
+            request.json['username']) + "', '" + str(request.json['email']) + "', '" + str(
+            request.json['admin']) + "', '" + str(passwd) + "')"
 
-    return querydb(data, operation='POST')
+        return querydb(data, operation='POST')
+    else:
+        return {"msg": "Email or username already in use."}
 
 
 def getUserByUsername(username):

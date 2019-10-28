@@ -5,6 +5,10 @@ from loadconfig import load_config
 
 
 def connection():
+    # Connection to use when deploying in local
+    # config = load_config('../config/config.yml')
+
+    # Connection to use when deploying on docker
     config = load_config('config/config.yml')
     cb = cbreaker.check_breaker()
 
