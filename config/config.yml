@@ -4,3 +4,8 @@ postgres:
   host: 10.0.200.68
   port: 5432
   database: planthealthcare
+
+jaeger:
+  host: 10.0.200.68
+  port: 5775
+  service_name: planthealthcare

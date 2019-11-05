@@ -11,7 +11,8 @@ def getAllUsers(data=None):
 
 def postUser(request):
     # Add OR username = str(request.json['username'])
-    checkUserEmail = 'SELECT * FROM "user" WHERE email=' + "'" + str(request.json['email']) + "' OR username=" + "'" + str(request.json['username']) + "'"
+    checkUserEmail = 'SELECT * FROM "user" WHERE email=' + "'" + str(
+        request.json['email']) + "' OR username=" + "'" + str(request.json['username']) + "'"
     checkResponse = getAllUsers(checkUserEmail)
     if checkResponse == ({'msg': 'No data to return.'}, 204):
         passwd = sha256_crypt.encrypt(str(request.json['password']))
@@ -39,7 +40,6 @@ def getUserByID(user_id):
 
 
 def putUserByID(request, user_id):
-
     data = getUserByID(user_id)
     if data == "No data to return.":
         return postUser(request), 204
@@ -58,7 +58,6 @@ def putUserByID(request, user_id):
 
 
 def deleteUserByID(user_id):
-
     data = getUserByID(user_id)
     if data == "No data to return.":
         return {"msg": "User with user_id " + str(user_id) + " does not exist in DB."}
@@ -102,8 +101,8 @@ def putDataCheck(request, data):
 
 def getSchema():
     return Schema({'first_name': And(str, len),
-                     'last_name': And(str, len),
-                     'username': And(str, len),
-                     'email': And(str, len),
-                     'admin': And(Use(bool)),
-                     'password': And(str, len)})
+                   'last_name': And(str, len),
+                   'username': And(str, len),
+                   'email': And(str, len),
+                   'admin': And(Use(bool)),
+                   'password': And(str, len)})
