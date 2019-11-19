@@ -7,7 +7,7 @@ COPY requirements.txt /requirements.txt
 RUN pip install --install-option='--prefix=/install' -r /requirements.txt
 
 
-COPY --from=0 /install /usr/local
+COPY /install /usr/local
 COPY . /app
 RUN apk --no-cache add libpq
 WORKDIR /app
