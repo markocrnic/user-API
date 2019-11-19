@@ -8,6 +8,7 @@ import implementation as implementation
 app = Flask(__name__)
 CORS(app)
 
+# Initialize jaeger tracer and flask tracer
 jaeger_tracer = initializejaeger()
 tracing = FlaskTracing(jaeger_tracer)
 

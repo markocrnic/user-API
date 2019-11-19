@@ -3,6 +3,7 @@ import time
 
 
 class CircuitBreaker:
+    # Parameters with default values
     flag = True
     flag_reconnection_started = False
     error_threshold = 3
@@ -18,21 +19,19 @@ class CircuitBreaker:
         self.reconnection_interval = reconnection_interval
         self.exception_types = exception_types
 
+    # Check if the error is in expected exception types and if error threshold is reached
     def check_state(self, error, methodToRun):
         if error.__class__.__name__ in self.exception_types:
-            print('Error caught inside given exception types. Starting breaker check.\n')
             if self.error_occurrence < self.error_threshold:
-                print('Error threshold not yet reached, incrementing occurrence. \n')
+                # If error threshold not yet reached, increment error occurrence
                 self.error_occurrence += 1
-                print('Error occurrence after incrementing: ' + str(self.error_occurrence) + '\n')
             else:
-                print('Error threshold is reached. \n')
+                # Error threshold reached, setting flag to False meaning open circuit breaker
                 self.flag = False
 
                 if not self.flag_reconnection_started:
-                    print('Starting new thread for reconnecting.\n')
+                    # If reconnection flag is False, set it to True and start new Thread for reconnection
                     self.flag_reconnection_started = True
-                    print('Set flag for reconnection to :' + str(self.flag_reconnection_started) + ' --- should be True\n')
                     thread = threading.Thread(target=self.try_reconnection, args=(methodToRun, ))
                     thread.start()
             return str(self.flag)
@@ -40,20 +39,14 @@ class CircuitBreaker:
             return 'Error not caught in breaker'
 
     def try_reconnection(self, methodToRun):
-
+        # Wait for set reconnection time and start reconnection
         self.flag_reconnection_started = True
-
-        print('Commencing reconnection in ' + str(self.reconnection_time) + ' seconds.\n')
-        print('Value of Flag of reconnection started is: ' + str(self.flag_reconnection_started) + '\n')
         time.sleep(self.reconnection_time)
-        print('Reconnection starting.\n')
+
         while not self.flag:
-            print('Inside while loop. Trying to reconnect. Flag value is: ' + str(self.flag) + '\n')
-            #self.display()
-            print(methodToRun)
+
             if methodToRun():
                 print('\nReconnection is successful. Resetting values.\n')
-                self.display()
                 self.reset_values()
                 print('\nValues after reset: \n')
                 self.display()
@@ -87,19 +80,16 @@ class CircuitBreaker:
 
 
 def check_breaker():
+    # Check if instance of CB is already created
     global cb
-    print('starting cb check: \n')
     try:
         cb
-        print('Found cb in try block\n')
     except:
         cb = None
     if cb is None:
-        print('cb is None\n')
+        # CB not found, creating new circuit breaker
         cb = CircuitBreaker(2, 0, 10, 5, ['OperationalError'])
-        print('Created new circuit breaker\n')
     else:
-        print('cb is not none. Displaying values on entry to connect method')
         cb.display()
 
     return cb

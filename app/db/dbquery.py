@@ -4,23 +4,21 @@ from flask import jsonify
 
 def querydb(data, operation, check=None, user_id=None):
     try:
+        # Open connection to DB and check if the CB is open
         c, conn = connection()
         if c == {'msg': 'Circuit breaker is open, reconnection in porgress'}:
             return c, 500
 
+        # Based on operation, execute query to DB
         if operation == 'POST':
-
-            c.execute(str(data))
-            conn.commit()
-
-            c.close()
-            conn.close()
+            executeQuery(c, conn, data)
             return {"msg": "New user added to DB."}, 201
 
         if operation == 'GET':
 
             c.execute(data)
 
+            # Check if the expected payload is a list or tuple
             if check == 'list':
                 data = c.fetchall()
                 payload = []
@@ -35,6 +33,8 @@ def querydb(data, operation, check=None, user_id=None):
                     conn.close()
                     return jsonify(payload)
                 else:
+                    c.close()
+                    conn.close()
                     return {'msg': 'No data to return.'}, 204
 
             if check == 'tuple':
@@ -52,23 +52,11 @@ def querydb(data, operation, check=None, user_id=None):
                     return "No data to return."
 
         if operation == 'PUT':
-
-            c.execute(data)
-            conn.commit()
-            print("User with user_id " + str(user_id) + " is updated.")
-
-            c.close()
-            conn.close()
+            executeQuery(c, conn, data)
             return {"msg": "User with user_id " + str(user_id) + " is updated."}, 200
 
         if operation == 'DELETE':
-
-            c.execute(data)
-            conn.commit()
-            print("User with user_id " + str(user_id) + " is deleted from DB.")
-
-            c.close()
-            conn.close()
+            executeQuery(c, conn, data)
             return {"msg": "User with user_id " + str(user_id) + " is deleted from DB."}
 
     except Exception as e:
@@ -77,3 +65,10 @@ def querydb(data, operation, check=None, user_id=None):
         print(e)
         return {'msg': 'Something went wrong while executing ' + operation + ' operation on users.'}, 500
 
+
+def executeQuery(c, conn, data):
+    c.execute(data)
+    conn.commit()
+
+    c.close()
+    conn.close()

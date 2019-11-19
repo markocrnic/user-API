@@ -10,7 +10,7 @@ def getAllUsers(data=None):
 
 
 def postUser(request):
-    # Add OR username = str(request.json['username'])
+    # Check if user with that email or username already exists in DB
     checkUserEmail = 'SELECT * FROM "user" WHERE email=' + "'" + str(
         request.json['email']) + "' OR username=" + "'" + str(request.json['username']) + "'"
     checkResponse = getAllUsers(checkUserEmail)
@@ -40,11 +40,12 @@ def getUserByID(user_id):
 
 
 def putUserByID(request, user_id):
+    # Check if user with user_id already exist
     data = getUserByID(user_id)
     if data == "No data to return.":
         return postUser(request), 204
     else:
-
+        # Map sent data to user data
         putData = putDataCheck(request, data)
         if putData == "Something went wrong in mapping data.":
             return {"msg": "Something went wrong in mapping data."}, 500

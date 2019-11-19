@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../flower-API/.idea/flower-API.iml" filepath="$PROJECT_DIR$/../flower-API/.idea/flower-API.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../notification-scheduler/.idea/notification-scheduler.iml" filepath="$PROJECT_DIR$/../notification-scheduler/.idea/notification-scheduler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../planthealthcare-gateway/.idea/planthealthcare-gateway.iml" filepath="$PROJECT_DIR$/../planthealthcare-gateway/.idea/planthealthcare-gateway.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/user-API.iml" filepath="$PROJECT_DIR$/.idea/user-API.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../user-management-API/.idea/user-management-API.iml" filepath="$PROJECT_DIR$/../user-management-API/.idea/user-management-API.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../user2flower/.idea/user2flower.iml" filepath="$PROJECT_DIR$/../user2flower/.idea/user2flower.iml" />
     </modules>
   </component>
 </project>

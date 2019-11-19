@@ -6,6 +6,11 @@
     </content>
     <orderEntry type="jdk" jdkName="Python 3.7 (user-API2)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="flower-API" />
+    <orderEntry type="module" module-name="user2flower" />
+    <orderEntry type="module" module-name="user-management-API" />
+    <orderEntry type="module" module-name="planthealthcare-gateway" />
+    <orderEntry type="module" module-name="notification-scheduler" />
   </component>
   <component name="TestRunnerService">
     <option name="PROJECT_TEST_RUNNER" value="Unittests" />

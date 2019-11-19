@@ -10,14 +10,15 @@ def connection():
 
     # Connection to use when deploying on docker
     config = load_config('config/config.yml')
+
+    # Check if the breaker already exist and if not, initialize new one
     cb = cbreaker.check_breaker()
 
+    # Check from where the connection is coming in case of open circuit breaker
     frm = inspect.stack()[1]
     mod = inspect.getmodule(frm[0])
     if mod.__name__ != 'patterns.circuit_breaker' and cb.getFlagReconnection():
         return {'msg': 'Circuit breaker is open, reconnection in porgress'}, '500'
-
-    print('Module name is: ' + mod.__name__)
 
     try:
         conn = psycopg2.connect(user=config['postgres']['user'],
@@ -26,22 +27,16 @@ def connection():
                                 port=config['postgres']['port'],
                                 database=config['postgres']['database'])
 
-        print('\n\nConnection successful\n\n')
-
         c = conn.cursor()
-
-        # Print PostgreSQL version
-        c.execute("SELECT version();")
-        record = c.fetchone()
-        print("You are connected to - ", record, "\n")
 
     except (Exception, psycopg2.Error) as error:
         print("Error while connecting to PostgreSQL", error)
         conn = ''
+        # If exception is raised while connecting, check circuit breaker
         if not cb.getFlagReconnection():
             cb.check_state(error, connection)
 
     finally:
-        # returning database connection
+        # Returning database connection and cursor
         if conn:
             return c, conn
