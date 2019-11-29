@@ -4,7 +4,10 @@ from loadconfig import load_config
 
 
 def initializejaeger():
+    # Connection to use when deploying in local
+    # jaegerdata = load_config('../config/config.yml')
 
+    # Connection to use when deploying on docker
     jaegerdata = load_config('config/config.yml')
     print(jaegerdata)
 
